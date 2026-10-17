@@ -11,11 +11,11 @@ def validate_task_title(title):
 
 
 def validate_task_description(description):
-    """Description must be 1-200 characters. Raises ValueError if invalid."""
+    """Description must be 1-500 characters. Raises ValueError if invalid."""
     if len(description) == 0:
         raise ValueError("Description cannot be empty.")
-    if len(description) > 200:
-        raise ValueError("Description must be 200 characters or fewer.")
+    if len(description) > 500:
+        raise ValueError("Description must be 500 characters or fewer.")
     return True
 
 
