@@ -7,11 +7,12 @@ from task_manager.validation import (
 
 def add_task(tasks, title, description, due_date):
     """Validate input, then add a new task. Returns True if added."""
-    if not (
+    try:
         validate_task_title(title)
-        and validate_task_description(description)
-        and validate_due_date(due_date)
-    ):
+        validate_task_description(description)
+        validate_due_date(due_date)
+    except ValueError as error:
+        print(f"Error: {error}")
         return False
     tasks.append(
         {
@@ -21,30 +22,38 @@ def add_task(tasks, title, description, due_date):
             "completed": False,
         }
     )
-    print(f"Task '{title.strip()}' added.")
+    print("Task added successfully!")
     return True
 
 
-def mark_task_as_complete(tasks, title):
-    """Mark the first matching pending task as complete. Returns True if found."""
-    for task in tasks:
-        if task["title"].lower() == title.strip().lower() and not task["completed"]:
-            task["completed"] = True
-            print(f"Task '{task['title']}' marked as complete.")
-            return True
-    print(f"Error: No pending task found with title '{title}'.")
-    return False
+def mark_task_as_complete(tasks, task_number):
+    """Mark the task with the given 1-based number as complete."""
+    try:
+        index = int(task_number) - 1
+    except ValueError:
+        print("Error: Please enter a valid task number.")
+        return False
+    if index < 0 or index >= len(tasks):
+        print("Error: Task number does not exist.")
+        return False
+    if tasks[index]["completed"]:
+        print("Error: Task is already complete.")
+        return False
+    tasks[index]["completed"] = True
+    print("Task marked as complete!")
+    return True
 
 
 def view_pending_tasks(tasks):
     """Print and return all tasks that are not completed."""
-    pending = [task for task in tasks if not task["completed"]]
+    pending = [t for t in tasks if not t["completed"]]
     if not pending:
         print("No pending tasks.")
         return pending
     print("Pending tasks:")
-    for i, task in enumerate(pending, start=1):
-        print(f"{i}. {task['title']} - {task['description']} (due {task['due_date']})")
+    for number, task in enumerate(tasks, start=1):
+        if not task["completed"]:
+            print(f"{number}. {task['title']} - {task['description']} (due {task['due_date']})")
     return pending
 
 
