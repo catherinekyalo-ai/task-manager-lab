@@ -9,3 +9,7 @@ A menu-based Python program to add tasks, mark them complete, view pending tasks
 
 ## Run
 `python3 main.py`
+
+## Screenshot
+
+![Task manager running](./screenshot.png)
